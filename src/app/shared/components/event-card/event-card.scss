@@ -1,0 +1,57 @@
+.event-card{
+
+    background:white;
+
+    border:1px solid #E5E7EB;
+
+    border-radius:20px;
+
+    padding:32px;
+
+    cursor:pointer;
+
+    transition:all .2s ease;
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:center;
+
+    gap:16px;
+
+}
+
+.event-card:hover{
+
+    transform:translateY(-6px);
+
+    box-shadow:0 12px 30px rgba(0,0,0,.08);
+
+    border-color:#047857;
+
+}
+
+.icon{
+
+    font-size:64px;
+
+    color:#047857;
+
+}
+
+h2{
+
+    font-size:1.5rem;
+
+    font-weight:700;
+
+}
+
+p{
+
+    text-align:center;
+
+    color:#6B7280;
+
+}

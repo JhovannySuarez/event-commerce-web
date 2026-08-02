@@ -1,0 +1,26 @@
+<h1>Venues</h1>
+
+<div class="venue-list">
+
+    @for (venue of venues; track venue.id) {
+
+        <div class="venue-card">
+
+            <img
+                [src]="venue.heroImage"
+                [alt]="venue.name">
+
+            <h2>{{ venue.name }}</h2>
+
+            <p>{{ venue.city }}, {{ venue.country }}</p>
+
+            <p>
+                ⭐ {{ venue.averageRating }}
+                ({{ venue.reviewCount }})
+            </p>
+
+        </div>
+
+    }
+
+</div>

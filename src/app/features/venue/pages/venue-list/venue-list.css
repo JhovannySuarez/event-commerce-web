@@ -1,0 +1,41 @@
+.venue-list {
+
+    display: grid;
+
+    grid-template-columns: repeat(auto-fill, minmax(320px,1fr));
+
+    gap: 24px;
+
+}
+
+.venue-card {
+
+    border-radius: 12px;
+
+    overflow: hidden;
+
+    border: solid 1px #e5e5e5;
+
+    cursor: pointer;
+
+    transition: .2s;
+
+}
+
+.venue-card:hover{
+
+    transform: translateY(-4px);
+
+    box-shadow: 0 8px 20px rgba(0,0,0,.15);
+
+}
+
+img{
+
+    width:100%;
+
+    height:220px;
+
+    object-fit:cover;
+
+}

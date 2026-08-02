@@ -1,0 +1,22 @@
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+
+import { EventCardComponent } from './event-card';
+
+describe('EventCard', () => {
+  let component: EventCardComponent;
+  let fixture: ComponentFixture<EventCardComponent>;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [EventCardComponent],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(EventCardComponent);
+    component = fixture.componentInstance;
+    await fixture.whenStable();
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+});

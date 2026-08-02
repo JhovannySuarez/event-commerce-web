@@ -1,0 +1,13 @@
+<h1>Design System Playground</h1>
+
+<div class="cards">
+
+    @for(event of eventTypes; track event.id){
+
+        <app-event-card
+            [event]="event">
+        </app-event-card>
+
+    }
+
+</div>
