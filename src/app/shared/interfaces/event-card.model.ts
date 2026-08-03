@@ -8,6 +8,8 @@ export interface EventCardModel {
 
     icon: string;
 
+    route?: string;
+
     selected?: boolean;
 
     disabled?: boolean;
