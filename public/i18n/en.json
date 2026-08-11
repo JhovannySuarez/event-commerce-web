@@ -1,0 +1,27 @@
+{
+  "home": {
+    "title": "Plan your event.",
+    "subtitle": "Start by telling us what you're planning."
+  },
+
+  "events": {
+    "social": {
+      "title": "Social Event",
+      "description": "Weddings, birthdays, anniversaries and more."
+    },
+
+    "corporate": {
+      "title": "Corporate Event",
+      "description": "Meetings, product launches and business events."
+    },
+
+    "other": {
+      "title": "Something Else?",
+      "description": "Tell us what you're planning."
+    }
+  },
+
+  "common": {
+    "letsStart": "Let's start"
+  }
+}

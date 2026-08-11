@@ -1,0 +1,32 @@
+<header class="header">
+
+    <div class="header-content">
+
+        <a class="brand" routerLink="/">
+            Event Planner
+        </a>
+
+        <div class="language-selector">
+
+            <span class="material-symbols-outlined language-icon">
+                language
+            </span>
+
+            <select
+                [value]="currentLanguage"
+                (change)="changeLanguage($event)"
+                aria-label="Select language">
+
+                @for (language of languages; track language.value) {
+                    <option [value]="language.value">
+                        {{ language.label }}
+                    </option>
+                }
+
+            </select>
+
+        </div>
+
+    </div>
+
+</header>

@@ -5,15 +5,15 @@
     </span>
 
     <h2>
-        {{ event().title }}
+        {{ ('events.' + event().id + '.title') | translate }}
     </h2>
 
     <p>
-        {{ event().description }}
+        {{ ('events.' + event().id + '.description') | translate }}
     </p>
 
     <span class="cta">
-        Let's start →
+        {{ 'common.letsStart' | translate }} →
     </span>
 
 </div>

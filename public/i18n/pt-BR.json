@@ -1,0 +1,27 @@
+{
+  "home": {
+    "title": "Planeje seu evento.",
+    "subtitle": "Comece nos contando o que você está planejando."
+  },
+
+  "events": {
+    "social": {
+      "title": "Evento Social",
+      "description": "Casamentos, aniversários, comemorações e muito mais."
+    },
+
+    "corporate": {
+      "title": "Evento Corporativo",
+      "description": "Reuniões, lançamentos de produtos e eventos empresariais."
+    },
+
+    "other": {
+      "title": "Algo diferente?",
+      "description": "Conte-nos o que você está planejando."
+    }
+  },
+
+  "common": {
+    "letsStart": "Começar"
+  }
+}

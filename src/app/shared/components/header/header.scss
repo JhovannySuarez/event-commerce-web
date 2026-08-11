@@ -1,0 +1,115 @@
+:host {
+    display: block;
+}
+
+.header {
+    width: 100%;
+    background: #F8FAFC;
+    border-bottom: 1px solid #E5E7EB;
+}
+
+.header-content {
+    max-width: 1400px;
+    height: 64px;
+    margin: 0 auto;
+    padding: 0 32px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    box-sizing: border-box;
+}
+
+.brand {
+    color: #111827;
+    text-decoration: none;
+
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: .04rem;
+
+    transition: color .2s ease;
+}
+
+.brand:hover {
+    color: #047857;
+}
+
+.language-selector {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    color: #374151;
+}
+
+.language-icon {
+    font-size: 21px;
+    color: #374151;
+}
+
+.language-selector select {
+    appearance: none;
+
+    border: none;
+    background: transparent;
+
+    color: #111827;
+
+    font-family: inherit;
+    font-size: .9rem;
+    font-weight: 600;
+
+    padding: 6px 24px 6px 2px;
+
+    cursor: pointer;
+    outline: none;
+
+    background-image:
+        linear-gradient(45deg, transparent 50%, #374151 50%),
+        linear-gradient(135deg, #374151 50%, transparent 50%);
+
+    background-position:
+        calc(100% - 10px) 50%,
+        calc(100% - 5px) 50%;
+
+    background-size:
+        5px 5px,
+        5px 5px;
+
+    background-repeat: no-repeat;
+}
+
+.language-selector select:hover {
+    color: #047857;
+}
+
+.language-selector select:focus {
+    color: #047857;
+}
+
+.language-selector option {
+    color: #111827;
+    background: white;
+}
+
+@media (max-width: 600px) {
+
+    .header-content {
+        height: 58px;
+        padding: 0 20px;
+    }
+
+    .brand {
+        font-size: .9rem;
+    }
+
+    .language-icon {
+        font-size: 20px;
+    }
+
+    .language-selector select {
+        font-size: .85rem;
+    }
+}
