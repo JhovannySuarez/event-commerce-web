@@ -1,7 +1,7 @@
 {
   "home": {
-    "title": "Planea tu evento.",
-    "subtitle": "Comienza contándonos qué estás planeando."
+    "title": "Planea tu evento",
+    "subtitle": "Comienza contándonos qué estás planeando"
   },
 
   "events": {
@@ -19,6 +19,38 @@
       "title": "¿Algo diferente?",
       "description": "Cuéntanos qué estás planeando."
     }
+  },
+
+  "venueSearch": {
+    "title": "Encuentra el lugar perfecto",
+    "subtitle": "Cuéntanos un poco más sobre tu evento.",
+
+    "eventType": "Tipo de evento",
+    "occasion": "¿Qué vas a celebrar?",
+    "guests": "¿Para cuantas personas?",
+    "city": "¿En qué ciudad?",
+    "date": "¿Cuando?",
+
+    "selectOccasion": "Selecciona una ocasión",
+    "selectCity": "Selecciona una ciudad",
+    "selectDate": "Selecciona una fecha",
+
+    "findVenues": "Buscar lugares",
+
+    "subtypes": {
+      "wedding": "Matrimonio",
+      "birthday": "Cumpleaños",
+      "anniversary": "Aniversario",
+      "firstCommunion": "Primera comunión",
+      "babyShower": "Baby shower",
+      "conference": "Conferencia",
+      "meeting": "Reunión",
+      "productLaunch": "Lanzamiento de producto",
+      "workshop": "Taller",
+      "other": "Otro"
+    },
+    "otherSubtype": "¿Cuál?",
+    "otherSubtypePlaceholder": "Describe la ocasión"
   },
 
   "common": {

@@ -21,6 +21,38 @@
     }
   },
 
+  "venueSearch": {
+    "title": "Find the perfect venue",
+    "subtitle": "Tell us a little more about your event.",
+
+    "eventType": "Event type",
+    "occasion": "What are you celebrating?",
+    "guests": "How many guests?",
+    "city": "Which city?",
+    "date": "When?",
+
+    "selectOccasion": "Select an occasion",
+    "selectCity": "Select a city",
+    "selectDate": "Select a date",
+
+    "findVenues": "Find venues",
+
+    "subtypes": {
+      "wedding": "Wedding",
+      "birthday": "Birthday",
+      "anniversary": "Anniversary",
+      "firstCommunion": "First Communion",
+      "babyShower": "Baby Shower",
+      "conference": "Conference",
+      "meeting": "Meeting",
+      "productLaunch": "Product Launch",
+      "workshop": "Workshop",
+      "other": "Other"
+    },
+    "otherSubtype": "Which one?",
+    "otherSubtypePlaceholder": "Describe the occasion"
+  },
+
   "common": {
     "letsStart": "Let's start"
   }

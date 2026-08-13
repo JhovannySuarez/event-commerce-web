@@ -2,9 +2,30 @@
 
     <div class="header-content">
 
-        <a class="brand" routerLink="/">
-            Event Planner
+        @if (showBackButton()) {
+
+            <button
+                class="back-button"
+                type="button"
+                (click)="goBack()"
+                aria-label="Go back">
+
+                <span class="material-symbols-outlined">
+                    arrow_back
+                </span>
+
+            </button>
+
+        }
+
+        <a
+            class="brand"
+            routerLink="/">
+
+            EVENT PLANNER
+
         </a>
+
 
         <div class="language-selector">
 
@@ -17,10 +38,15 @@
                 (change)="changeLanguage($event)"
                 aria-label="Select language">
 
-                @for (language of languages; track language.value) {
+                @for (
+                    language of languages;
+                    track language.value
+                ) {
+
                     <option [value]="language.value">
                         {{ language.label }}
                     </option>
+
                 }
 
             </select>

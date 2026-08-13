@@ -1,9 +1,5 @@
 <section class="hero">
 
-    <span class="eyebrow">
-        EVENT PLANNER
-    </span>
-
     <h1>
         {{ 'home.title' | translate }}
     </h1>
@@ -19,9 +15,13 @@
     <div class="cards">
 
         @for (event of eventTypes; track event.id) {
-            <app-event-card [event]="event"></app-event-card>
+
+            <app-event-card
+                [event]="event"
+                (selected)="selectEvent($event)"
+            />
         }
 
     </div>
-
+    
 </section>

@@ -2,8 +2,8 @@ import { Injectable, inject, signal } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 
 export enum Language {
-  EN = 'en',
   ES = 'es',
+  EN = 'en',
   PT_BR = 'pt-BR'
 }
 
@@ -40,8 +40,8 @@ export class LanguageService {
     const stored = localStorage.getItem(this.STORAGE_KEY);
 
     if (
-      stored === Language.EN ||
       stored === Language.ES ||
+      stored === Language.EN ||
       stored === Language.PT_BR
     ) {
       return stored;
@@ -49,14 +49,14 @@ export class LanguageService {
 
     const browser = navigator.language;
 
-    if (browser.startsWith('es')) {
-      return Language.ES;
+    if (browser.startsWith('en')) {
+      return Language.EN;
     }
 
     if (browser.startsWith('pt')) {
       return Language.PT_BR;
     }
 
-    return Language.EN;
+    return Language.ES;
   }
 }

@@ -21,6 +21,38 @@
     }
   },
 
+  "venueSearch": {
+    "title": "Encontre o local perfeito",
+    "subtitle": "Conte-nos um pouco mais sobre o seu evento.",
+
+    "eventType": "Tipo de evento",
+    "occasion": "O que você vai comemorar?",
+    "guests": " Quantos convidados?",
+    "city": "Qual cidade?",
+    "date": "Quando?",
+
+    "selectOccasion": "Selecione uma ocasião",
+    "selectCity": "Selecione uma cidade",
+    "selectDate": "Selecione uma data",
+
+    "findVenues": "Encontrar locais",
+
+    "subtypes": {
+      "wedding": "Casamento",
+      "birthday": "Aniversário",
+      "anniversary": "Aniversário de casamento",
+      "firstCommunion": "Primeira comunhão",
+      "babyShower": "Chá de bebê",
+      "conference": "Conferência",
+      "meeting": "Reunião",
+      "productLaunch": "Lançamento de produto",
+      "workshop": "Workshop",
+      "other": "Outro"
+    },
+    "otherSubtype": "Qual?",
+    "otherSubtypePlaceholder": "Descreva a ocasião"
+  },
+
   "common": {
     "letsStart": "Começar"
   }

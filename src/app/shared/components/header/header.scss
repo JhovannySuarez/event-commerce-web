@@ -1,115 +1,160 @@
-:host {
-    display: block;
+.header {
+
+    height: 72px;
+
+    background: #F8FAFC;
+
+    border-bottom: 1px solid #E5E7EB;
+
 }
 
-.header {
-    width: 100%;
-    background: #F8FAFC;
-    border-bottom: 1px solid #E5E7EB;
-}
 
 .header-content {
-    max-width: 1400px;
-    height: 64px;
+
+    width: min(100% - 48px, 1400px);
+
+    height: 100%;
+
     margin: 0 auto;
-    padding: 0 32px;
 
     display: flex;
-    align-items: center;
-    justify-content: space-between;
 
-    box-sizing: border-box;
+    align-items: center;
+
+    gap: 16px;
+
 }
+
+
+/*
+ * Brand
+ */
 
 .brand {
-    color: #111827;
+
+    color: #047857;
+
     text-decoration: none;
 
-    font-size: 1rem;
-    font-weight: 600;
-    letter-spacing: .04rem;
+    font-size: .95rem;
 
-    transition: color .2s ease;
+    font-weight: 700;
+
+    letter-spacing: .18rem;
+
+    text-transform: uppercase;
+
+    white-space: nowrap;
+
 }
 
-.brand:hover {
+
+/*
+ * Back button
+ */
+
+.back-button {
+
+    width: 44px;
+
+    height: 44px;
+
+    padding: 0;
+
+    border: 1px solid #D1D5DB;
+
+    border-radius: 8px;
+
+    background: white;
+
+    color: #111827;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    cursor: pointer;
+
+    transition:
+        color .2s ease,
+        border-color .2s ease,
+        background .2s ease;
+
+}
+
+
+.back-button:hover {
+
     color: #047857;
+
+    border-color: #047857;
+
+    background: #F0FDF4;
+
 }
+
+
+/*
+ * Language selector
+ */
 
 .language-selector {
-    display: flex;
-    align-items: center;
-    gap: 6px;
 
-    color: #374151;
+    margin-left: auto;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
 }
+
 
 .language-icon {
-    font-size: 21px;
-    color: #374151;
+
+    font-size: 24px;
+
+    color: #111827;
+
 }
 
+
 .language-selector select {
-    appearance: none;
 
     border: none;
+
+    outline: none;
+
     background: transparent;
 
     color: #111827;
 
-    font-family: inherit;
-    font-size: .9rem;
+    font-size: 1rem;
+
     font-weight: 600;
 
-    padding: 6px 24px 6px 2px;
-
     cursor: pointer;
-    outline: none;
 
-    background-image:
-        linear-gradient(45deg, transparent 50%, #374151 50%),
-        linear-gradient(135deg, #374151 50%, transparent 50%);
-
-    background-position:
-        calc(100% - 10px) 50%,
-        calc(100% - 5px) 50%;
-
-    background-size:
-        5px 5px,
-        5px 5px;
-
-    background-repeat: no-repeat;
 }
 
-.language-selector select:hover {
-    color: #047857;
-}
-
-.language-selector select:focus {
-    color: #047857;
-}
-
-.language-selector option {
-    color: #111827;
-    background: white;
-}
 
 @media (max-width: 600px) {
 
     .header-content {
-        height: 58px;
-        padding: 0 20px;
+
+        width: min(100% - 32px, 1400px);
+
     }
 
     .brand {
-        font-size: .9rem;
+
+        font-size: .8rem;
+
+        letter-spacing: .14rem;
+
     }
 
-    .language-icon {
-        font-size: 20px;
-    }
-
-    .language-selector select {
-        font-size: .85rem;
-    }
 }

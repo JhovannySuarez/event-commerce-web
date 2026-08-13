@@ -1,0 +1,184 @@
+<section class="venue-search">
+
+  <header class="hero">
+
+    <h1>
+      {{ 'venueSearch.title' | translate }}
+    </h1>
+
+    <p>
+      {{ 'venueSearch.subtitle' | translate }}
+    </p>
+
+  </header>
+
+
+  <main class="search-card">
+
+    <!-- Occasion -->
+
+    <section class="filter-section">
+
+      <label>
+        {{ 'venueSearch.occasion' | translate }}
+      </label>
+
+      <div class="subtypes">
+
+        @for (subtype of availableSubtypes(); track subtype.id) {
+
+          <button
+            type="button"
+            class="subtype"
+            [class.selected]="selectedSubtype() === subtype.id"
+            (click)="selectSubtype(subtype.id)"
+          >
+            {{ 'venueSearch.subtypes.' + subtype.translationKey | translate }}
+          </button>
+
+        }
+
+      </div>
+
+    </section>
+
+
+    <!-- Other occasion -->
+
+    @if (selectedSubtype() === 'other') {
+
+      <section class="filter-section other-subtype-section">
+
+        <label for="other-subtype">
+          {{ 'venueSearch.otherSubtype' | translate }}
+        </label>
+
+        <input
+          id="other-subtype"
+          type="text"
+          class="text-field"
+          [value]="otherSubtype()"
+          (input)="updateOtherSubtype($event)"
+          [placeholder]="'venueSearch.otherSubtypePlaceholder' | translate"
+          maxlength="100"
+        />
+
+      </section>
+
+    }
+
+
+    <!-- Guests -->
+
+    <section class="filter-section">
+
+      <label>
+        {{ 'venueSearch.guests' | translate }}
+      </label>
+
+      <div class="guest-selector">
+
+        <button
+          type="button"
+          class="guest-button"
+          (click)="decreaseGuests()"
+          [disabled]="guests() <= minGuests"
+          aria-label="Decrease number of guests"
+        >
+          −
+        </button>
+
+        <input
+          type="number"
+          class="guest-input"
+          [value]="guests()"
+          (input)="onGuestsInput($event)"
+          [min]="minGuests"
+          [max]="maxGuests"
+          aria-label="Number of guests"
+        />
+
+        <button
+          type="button"
+          class="guest-button"
+          (click)="increaseGuests()"
+          [disabled]="guests() >= maxGuests"
+          aria-label="Increase number of guests"
+        >
+          +
+        </button>
+
+      </div>
+
+    </section>
+
+
+    <!-- City and date -->
+
+    <section class="filter-row">
+
+      <!-- City -->
+
+      <div class="filter-section">
+
+        <label>
+          {{ 'venueSearch.city' | translate }}
+        </label>
+
+        <div class="placeholder-field">
+          {{ 'venueSearch.selectCity' | translate }}
+        </div>
+
+      </div>
+
+
+      <!-- Date -->
+
+      <div class="filter-section">
+
+        <label>
+          {{ 'venueSearch.date' | translate }}
+        </label>
+
+        <mat-form-field
+          appearance="outline"
+          class="date-field"
+        >
+        <input
+          matInput
+          [matDatepicker]="picker"
+          [min]="minDate"
+          [value]="selectedDate()"
+          (dateChange)="onDateChange($event.value)"
+          [placeholder]="'venueSearch.selectDate' | translate"
+          readonly
+        />
+
+          <mat-datepicker-toggle
+            matIconSuffix
+            [for]="picker"
+          >
+          </mat-datepicker-toggle>
+
+          <mat-datepicker #picker></mat-datepicker>
+
+        </mat-form-field>
+
+      </div>
+
+    </section>
+
+
+    <!-- Search -->
+
+    <button
+      type="button"
+      class="find-button"
+    >
+      {{ 'venueSearch.findVenues' | translate }}
+      →
+    </button>
+
+  </main>
+
+</section>
