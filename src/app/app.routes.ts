@@ -18,7 +18,7 @@ export const routes: Routes = [
    * Venue Search
    */
   {
-    path: 'venue-search/:eventTypeId',
+    path: 'venue-search/:eventTypeCode',
     loadComponent: () =>
       import('./features/venue-search/venue-search')
         .then(m => m.VenueSearchComponent)

@@ -9,11 +9,11 @@
     </span>
 
     <h2>
-        {{ ('events.' + event().id + '.title') | translate }}
+        {{ event().name }}
     </h2>
 
     <p>
-        {{ ('events.' + event().id + '.description') | translate }}
+        {{ event().description }}
     </p>
 
     <span class="cta">

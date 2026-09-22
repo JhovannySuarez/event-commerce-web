@@ -1,10 +1,35 @@
 import { Injectable, inject, signal } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
+import { firstValueFrom } from 'rxjs';
 
 export enum Language {
   ES = 'es',
   EN = 'en',
   PT_BR = 'pt-BR'
+}
+
+export function detectInitialLanguage(): Language {
+  const stored = localStorage.getItem('language');
+
+  if (
+    stored === Language.ES ||
+    stored === Language.EN ||
+    stored === Language.PT_BR
+  ) {
+    return stored;
+  }
+
+  const browserLanguage = navigator.language.toLowerCase();
+
+  if (browserLanguage.startsWith('en')) {
+    return Language.EN;
+  }
+
+  if (browserLanguage.startsWith('pt')) {
+    return Language.PT_BR;
+  }
+
+  return Language.ES;
 }
 
 @Injectable({
@@ -16,47 +41,30 @@ export class LanguageService {
 
   private readonly translate = inject(TranslateService);
 
-  readonly currentLanguage = signal<Language>(this.loadLanguage());
+  readonly currentLanguage = signal<Language>(
+    detectInitialLanguage()
+  );
 
-  constructor() {
-    this.translate.use(this.currentLanguage());
+  initialize(): Promise<void> {
+    return firstValueFrom(
+      this.translate.use(this.currentLanguage())
+    ).then(() => {
+      this.updateDocumentLanguage();
+    });
   }
 
   setLanguage(language: Language): void {
-
     localStorage.setItem(this.STORAGE_KEY, language);
 
     this.currentLanguage.set(language);
 
-    this.translate.use(language);
+    this.translate.use(language).subscribe(() => {
+      this.updateDocumentLanguage();
+    });
   }
 
-  getLanguage(): Language {
-    return this.currentLanguage();
-  }
-
-  private loadLanguage(): Language {
-
-    const stored = localStorage.getItem(this.STORAGE_KEY);
-
-    if (
-      stored === Language.ES ||
-      stored === Language.EN ||
-      stored === Language.PT_BR
-    ) {
-      return stored;
-    }
-
-    const browser = navigator.language;
-
-    if (browser.startsWith('en')) {
-      return Language.EN;
-    }
-
-    if (browser.startsWith('pt')) {
-      return Language.PT_BR;
-    }
-
-    return Language.ES;
+  private updateDocumentLanguage(): void {
+    document.documentElement.lang =
+      this.currentLanguage();
   }
 }

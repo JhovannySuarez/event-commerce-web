@@ -19,7 +19,6 @@ import {
   LanguageService
 } from '../../../core/i18n/language.service';
 
-
 @Component({
   selector: 'app-header',
   standalone: true,
@@ -42,7 +41,7 @@ export class HeaderComponent {
   });
 
   readonly currentLanguage =
-    this.languageService.getLanguage();
+    this.languageService.currentLanguage;
 
   readonly languages = [
     {
@@ -59,9 +58,7 @@ export class HeaderComponent {
     }
   ];
 
-
   constructor() {
-
     this.router.events
       .pipe(
         filter(
@@ -78,14 +75,11 @@ export class HeaderComponent {
         );
 
       });
-
   }
-
 
   goBack(): void {
     this.location.back();
   }
-
 
   changeLanguage(event: Event): void {
 
@@ -95,7 +89,5 @@ export class HeaderComponent {
     this.languageService.setLanguage(
       select.value as Language
     );
-
   }
-
 }

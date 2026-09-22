@@ -1,13 +1,5 @@
-export interface EventCardModel {
+import { EventType } from '@core/event-catalog/event-catalog.service';
 
-    id: string;
-
-    icon: string;
-
-    route?: string;
-
-    selected?: boolean;
-
-    disabled?: boolean;
-
+export interface EventCardModel extends EventType {
+  icon: string;
 }

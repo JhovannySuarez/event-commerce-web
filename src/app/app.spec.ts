@@ -1,9 +1,12 @@
+import { provideTranslateService } from '@ngx-translate/core';
+import { provideRouter } from '@angular/router';
 import { TestBed } from '@angular/core/testing';
 import { App } from './app';
 
 describe('App', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
+      providers: [provideTranslateService(), provideRouter([])],
       imports: [App],
     }).compileComponents();
   });
@@ -14,10 +17,11 @@ describe('App', () => {
     expect(app).toBeTruthy();
   });
 
-  it('should render title', async () => {
+  it('should render the header and route outlet', async () => {
     const fixture = TestBed.createComponent(App);
     await fixture.whenStable();
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain('Hello, event-commerce-web');
+    expect(compiled.querySelector('app-header')).toBeTruthy();
+    expect(compiled.querySelector('router-outlet')).toBeTruthy();
   });
 });

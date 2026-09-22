@@ -3,40 +3,32 @@
     "title": "Planeje seu evento.",
     "subtitle": "Comece nos contando o que você está planejando."
   },
-
   "events": {
     "social": {
       "title": "Evento Social",
       "description": "Casamentos, aniversários, comemorações e muito mais."
     },
-
     "corporate": {
       "title": "Evento Corporativo",
       "description": "Reuniões, lançamentos de produtos e eventos empresariais."
     },
-
     "other": {
       "title": "Algo diferente?",
       "description": "Conte-nos o que você está planejando."
     }
   },
-
   "venueSearch": {
     "title": "Encontre o local perfeito",
     "subtitle": "Conte-nos um pouco mais sobre o seu evento.",
-
     "eventType": "Tipo de evento",
     "occasion": "O que você vai comemorar?",
     "guests": " Quantos convidados?",
     "city": "Qual cidade?",
     "date": "Quando?",
-
     "selectOccasion": "Selecione uma ocasião",
     "selectCity": "Selecione uma cidade",
     "selectDate": "Selecione uma data",
-
     "findVenues": "Encontrar locais",
-
     "subtypes": {
       "wedding": "Casamento",
       "birthday": "Aniversário",
@@ -50,10 +42,32 @@
       "other": "Outro"
     },
     "otherSubtype": "Qual?",
-    "otherSubtypePlaceholder": "Descreva a ocasião"
+    "otherSubtypePlaceholder": "Descreva a ocasião",
+    "loading": "Buscando espaços...",
+    "empty": "Nenhum espaço disponível neste nível.",
+    "searchError": "Não foi possível buscar. Tente novamente.",
+    "capacity": "Capacidade",
+    "fullDay": "Dia inteiro",
+    "loadMore": "Carregar mais espaços",
+    "tiers": {
+      "Q1": "Data solicitada",
+      "Q2": "Datas alternativas (±15 dias)",
+      "Q3": "Capacidade alternativa (até 10% menor)"
+    },
+    "nextTier": {
+      "Q1": "Buscar datas próximas",
+      "Q2": "Buscar com menor capacidade"
+    }
   },
-
   "common": {
     "letsStart": "Começar"
+  },
+  "catalog": {
+    "loading": "Carregando catálogo de eventos…",
+    "error": "Não foi possível carregar o catálogo.",
+    "retry": "Tentar novamente",
+    "emptyTypes": "Não há tipos de evento disponíveis.",
+    "emptySubtypes": "Não há subtipos disponíveis para este evento.",
+    "unknownType": "Este tipo de evento não está disponível."
   }
 }

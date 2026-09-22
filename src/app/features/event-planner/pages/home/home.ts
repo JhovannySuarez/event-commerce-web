@@ -1,8 +1,9 @@
-import { Component, inject  } from '@angular/core';
+import { Component, DestroyRef, signal, inject  } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { EventCardComponent } from '../../../../shared/components/event-card/event-card';
-import { EVENT_TYPES } from '../../../../shared/mock/event-types.mock';
+import { EventCatalogService, eventTypeIcon } from '@core/event-catalog/event-catalog.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { EventCardModel } from '../../../../shared/interfaces/event-card.model';
 import { TranslatePipe } from '@ngx-translate/core'; 
 import { Router } from '@angular/router';
@@ -20,7 +21,26 @@ import { Router } from '@angular/router';
 })
 export class HomeComponent {
   private readonly router = inject(Router);
-  readonly eventTypes: EventCardModel[] = EVENT_TYPES;
+  private readonly catalog = inject(EventCatalogService);
+  private readonly destroyRef = inject(DestroyRef);
+  readonly eventTypes = signal<EventCardModel[]>([]);
+  readonly loading = signal(false);
+  readonly error = signal(false);
+
+  constructor() { this.loadTypes(); }
+
+  loadTypes(): void {
+    if (this.loading()) return;
+    this.loading.set(true);
+    this.error.set(false);
+    this.catalog.getTypes().pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+      next: types => {
+        this.eventTypes.set(types.map(type => ({ ...type, icon: eventTypeIcon(type.code) })));
+        this.loading.set(false);
+      },
+      error: () => { this.error.set(true); this.loading.set(false); }
+    });
+  }
 
   selectEvent(eventTypeId: string): void {
   this.router.navigate([

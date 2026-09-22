@@ -3,40 +3,32 @@
     "title": "Plan your event.",
     "subtitle": "Start by telling us what you're planning."
   },
-
   "events": {
     "social": {
       "title": "Social Event",
       "description": "Weddings, birthdays, anniversaries and more."
     },
-
     "corporate": {
       "title": "Corporate Event",
       "description": "Meetings, product launches and business events."
     },
-
     "other": {
       "title": "Something Else?",
       "description": "Tell us what you're planning."
     }
   },
-
   "venueSearch": {
     "title": "Find the perfect venue",
     "subtitle": "Tell us a little more about your event.",
-
     "eventType": "Event type",
     "occasion": "What are you celebrating?",
     "guests": "How many guests?",
     "city": "Which city?",
     "date": "When?",
-
     "selectOccasion": "Select an occasion",
     "selectCity": "Select a city",
     "selectDate": "Select a date",
-
     "findVenues": "Find venues",
-
     "subtypes": {
       "wedding": "Wedding",
       "birthday": "Birthday",
@@ -50,10 +42,32 @@
       "other": "Other"
     },
     "otherSubtype": "Which one?",
-    "otherSubtypePlaceholder": "Describe the occasion"
+    "otherSubtypePlaceholder": "Describe the occasion",
+    "loading": "Searching spaces...",
+    "empty": "No spaces available in this tier.",
+    "searchError": "Search failed. Please try again.",
+    "capacity": "Capacity",
+    "fullDay": "Full day",
+    "loadMore": "Load more spaces",
+    "tiers": {
+      "Q1": "Requested date",
+      "Q2": "Alternative dates (±15 days)",
+      "Q3": "Alternative capacity (up to 10% smaller)"
+    },
+    "nextTier": {
+      "Q1": "Search nearby dates",
+      "Q2": "Search with lower capacity"
+    }
   },
-
   "common": {
     "letsStart": "Let's start"
+  },
+  "catalog": {
+    "loading": "Loading event catalog…",
+    "error": "Could not load the catalog.",
+    "retry": "Retry",
+    "emptyTypes": "No event types are available.",
+    "emptySubtypes": "No subtypes are available for this event.",
+    "unknownType": "This event type is unavailable."
   }
 }

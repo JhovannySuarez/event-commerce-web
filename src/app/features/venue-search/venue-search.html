@@ -13,7 +13,7 @@
   </header>
 
 
-  <main class="search-card">
+  <form class="search-card" (submit)="$event.preventDefault(); search()">
 
     <!-- Occasion -->
 
@@ -23,6 +23,17 @@
         {{ 'venueSearch.occasion' | translate }}
       </label>
 
+      @if (catalogLoading() || subtypesLoading()) { <p role="status">{{ 'catalog.loading' | translate }}</p> }
+      @if (catalogError()) {
+        <p role="alert">{{ catalogError() | translate }}</p>
+        <button type="button" (click)="loadType()">{{ 'catalog.retry' | translate }}</button>
+      }
+      @if (subtypesError()) {
+        <p role="alert">{{ 'catalog.error' | translate }}</p>
+        <button type="button" (click)="loadSubtypes()">{{ 'catalog.retry' | translate }}</button>
+      } @else if (selectedType() && !subtypesLoading() && availableSubtypes().length === 0) {
+        <p>{{ 'catalog.emptySubtypes' | translate }}</p>
+      }
       <div class="subtypes">
 
         @for (subtype of availableSubtypes(); track subtype.id) {
@@ -33,7 +44,7 @@
             [class.selected]="selectedSubtype() === subtype.id"
             (click)="selectSubtype(subtype.id)"
           >
-            {{ 'venueSearch.subtypes.' + subtype.translationKey | translate }}
+            {{ subtype.name }}
           </button>
 
         }
@@ -45,7 +56,7 @@
 
     <!-- Other occasion -->
 
-    @if (selectedSubtype() === 'other') {
+    @if (isOtherSubtype()) {
 
       <section class="filter-section other-subtype-section">
 
@@ -117,20 +128,24 @@
 
     <section class="filter-row">
 
-      <!-- City -->
-
-      <div class="filter-section">
-
-        <label>
-          {{ 'venueSearch.city' | translate }}
-        </label>
-
-        <div class="placeholder-field">
-          {{ 'venueSearch.selectCity' | translate }}
-        </div>
-
+    <!-- City -->
+    <div class="filter-section city-field">
+      <label>{{ 'venueSearch.city' | translate }}</label>
+      <div class="city-autocomplete">
+        <input type="text" class="text-field" [value]="cityQuery()" (input)="onCityInput($event)"
+          [placeholder]="'venueSearch.selectCity' | translate" autocomplete="off" />
+        @if (citySuggestions().length > 0) {
+          <div class="city-suggestions">
+            @for (city of citySuggestions(); track city.id) {
+              <button type="button" class="city-suggestion" (click)="selectCity(city)">
+                <span class="material-symbols-outlined">location_on</span>
+                <span class="city-info"><strong>{{ city.name }}</strong><small>{{ city.location }}</small></span>
+              </button>
+            }
+          </div>
+        }
       </div>
-
+    </div>
 
       <!-- Date -->
 
@@ -172,13 +187,58 @@
     <!-- Search -->
 
     <button
-      type="button"
+      type="submit"
+      [disabled]="!canSearch() || loading()"
       class="find-button"
     >
       {{ 'venueSearch.findVenues' | translate }}
       →
     </button>
 
-  </main>
+  </form>
+  <section class="search-results" aria-live="polite" [attr.aria-busy]="loading()">
+    @if (loading()) { <p>{{ 'venueSearch.loading' | translate }}</p> }
+    @if (error()) { <p role="alert">{{ error() | translate }}</p> }
+    @if (response(); as data) {
+      @for (group of resultTiers(); track group.tier) {
+      <h2>{{ 'venueSearch.tiers.' + group.tier | translate }}</h2>
+      @if (group.results.length === 0) { <p>{{ 'venueSearch.empty' | translate }}</p> }
+      @for (space of group.results; track space.eventSpaceId) {
+        <article class="space-card">
+          <h3>{{ space.eventSpaceName }}</h3>
+          <p>{{ space.address }}</p>
+          <p>{{ space.description }}</p>
+          <p>{{ 'venueSearch.capacity' | translate }}: {{ space.capacityMin }}–{{ space.capacityMax }}</p>
+          @if (space.averageRating !== null) {
+            <p>&#9733; {{ space.averageRating }} ({{ space.reviewCount ?? 0 }})</p>
+          }
+          @for (date of space.availableDates; track date.availableDate) {
+            <div class="available-date">
+              <strong>{{ date.availableDate }}</strong>
+              @if (space.bookingMode === 'FULL_DAY') {
+                <span>{{ 'venueSearch.fullDay' | translate }}</span>
+              } @else {
+                <ul>
+                  @for (slot of date.availableSlots; track $index) {
+                    <li>{{ slot.from.slice(0, 5) }}–{{ slot.until.slice(0, 5) }} ({{ slot.hours }} h)</li>
+                  }
+                </ul>
+              }
+            </div>
+          }
+        </article>
+      }
+      }
+      @if (data.hasMore) {
+        <button type="button" class="find-button" [disabled]="loading()" (click)="loadMore()">
+          {{ 'venueSearch.loadMore' | translate }}
+        </button>
+      } @else if (data.hasNextTier && data.tier !== 'Q3') {
+        <button type="button" class="find-button" [disabled]="loading()" (click)="nextTier()">
+          {{ 'venueSearch.nextTier.' + data.tier | translate }}
+        </button>
+      }
+    }
+  </section>
 
 </section>

@@ -1,17 +1,20 @@
+import { provideTranslateService } from '@ngx-translate/core';
+import { provideRouter } from '@angular/router';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { Header } from './header';
+import { HeaderComponent } from './header';
 
-describe('Header', () => {
-  let component: Header;
-  let fixture: ComponentFixture<Header>;
+describe('HeaderComponent', () => {
+  let component: HeaderComponent;
+  let fixture: ComponentFixture<HeaderComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [Header],
+      providers: [provideTranslateService(), provideRouter([])],
+      imports: [HeaderComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(Header);
+    fixture = TestBed.createComponent(HeaderComponent);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

@@ -14,6 +14,6 @@ export class EventCardComponent  {
   selected = output<string>();
 
   selectEvent(): void {
-    this.selected.emit(this.event().id);
+    this.selected.emit(this.event().code);
   }
 }

@@ -12,9 +12,14 @@
 
 <section class="event-types">
 
+    @if (loading()) { <p role="status">{{ 'catalog.loading' | translate }}</p> }
+    @else if (error()) {
+      <p role="alert">{{ 'catalog.error' | translate }}</p>
+      <button type="button" (click)="loadTypes()">{{ 'catalog.retry' | translate }}</button>
+    } @else if (eventTypes().length === 0) { <p>{{ 'catalog.emptyTypes' | translate }}</p> }
     <div class="cards">
 
-        @for (event of eventTypes; track event.id) {
+        @for (event of eventTypes(); track event.id) {
 
             <app-event-card
                 [event]="event"
