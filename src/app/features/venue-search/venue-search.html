@@ -15,6 +15,11 @@
 
   <form class="search-card" (submit)="$event.preventDefault(); search()">
 
+    <button type="button" class="mode-toggle" (click)="setSearchMode(searchMode() === 'general' ? 'venue' : 'general')">
+      {{ (searchMode() === 'general' ? 'venueSearch.knownVenue' : 'venueSearch.generalSearch') | translate }}
+    </button>
+
+    @if (searchMode() === 'general') {
     <!-- Occasion -->
 
     <section class="filter-section">
@@ -124,10 +129,43 @@
     </section>
 
 
+    }
     <!-- City and date -->
 
     <section class="filter-row">
 
+    @if (searchMode() === 'venue') {
+      <div class="filter-section city-field">
+        <label for="venue-name">{{ 'venueSearch.venueName' | translate }}</label>
+        <div class="city-autocomplete">
+          <input id="venue-name" type="text" class="text-field" [value]="venueQuery()" (input)="onVenueInput($event)"
+            [placeholder]="'venueSearch.venueHint' | translate" autocomplete="off" maxlength="100"
+            aria-controls="venue-options" [attr.aria-expanded]="venueSuggestions().length > 0" />
+          @if (venueSuggestions().length > 0) {
+            <div id="venue-options" class="city-suggestions">
+              @for (venue of venueSuggestions(); track venue.id) {
+                <button type="button" class="city-suggestion" (click)="selectVenue(venue)">
+                  <span class="material-symbols-outlined">location_on</span>
+                  <span class="city-info"><strong>{{ venue.name }}</strong><small>{{ venue.city }} / {{ venue.state }}</small></span>
+                </button>
+              }
+            </div>
+          }
+        </div>
+        @if (suggestionsLoading()) { <p role="status">{{ 'venueSearch.loading' | translate }}</p> }
+        @if (suggestionsError()) {
+          <p role="alert">{{ 'venueSearch.suggestionsError' | translate }}</p>
+          <button type="button" (click)="lookupVenues()">{{ 'catalog.retry' | translate }}</button>
+        } @else if (suggestionsDone() && venueSuggestions().length === 0) {
+          <p role="status">{{ 'venueSearch.noVenues' | translate }}</p>
+        }
+        @if (catalogLoading()) { <p role="status">{{ 'catalog.loading' | translate }}</p> }
+        @if (catalogError()) {
+          <p role="alert">{{ catalogError() | translate }}</p>
+          <button type="button" (click)="loadType()">{{ 'catalog.retry' | translate }}</button>
+        }
+      </div>
+    } @else {
     <!-- City -->
     <div class="filter-section city-field">
       <label>{{ 'venueSearch.city' | translate }}</label>
@@ -147,6 +185,7 @@
       </div>
     </div>
 
+    }
       <!-- Date -->
 
       <div class="filter-section">
@@ -202,10 +241,11 @@
     @if (response(); as data) {
       @for (group of resultTiers(); track group.tier) {
       <h2>{{ 'venueSearch.tiers.' + group.tier | translate }}</h2>
-      @if (group.results.length === 0) { <p>{{ 'venueSearch.empty' | translate }}</p> }
+      @if (group.results.length === 0) { <p>{{ (searchMode() === 'venue' && group.tier === 'Q1' ? 'venueSearch.venueUnavailable' : 'venueSearch.empty') | translate }}</p> }
       @for (space of group.results; track space.eventSpaceId) {
         <article class="space-card">
-          <h3>{{ space.eventSpaceName }}</h3>
+          <h3><a [routerLink]="['/event-spaces', space.eventSpaceId]"
+            [queryParams]="{ eventTypeId: configuredEventTypeId(), eventDate: space.availableDates[0]?.availableDate }">{{ space.eventSpaceName }}</a></h3>
           <p>{{ space.address }}</p>
           <p>{{ space.description }}</p>
           <p>{{ 'venueSearch.capacity' | translate }}: {{ space.capacityMin }}–{{ space.capacityMax }}</p>

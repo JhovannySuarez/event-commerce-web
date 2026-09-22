@@ -57,7 +57,14 @@
     "nextTier": {
       "Q1": "Search nearby dates",
       "Q2": "Search with lower capacity"
-    }
+    },
+    "knownVenue": "Already know your venue? Find it here",
+    "generalSearch": "Back to search filters",
+    "venueName": "Venue name",
+    "venueHint": "Type at least 3 characters",
+    "suggestionsError": "Could not load venues.",
+    "noVenues": "No venues match that name.",
+    "venueUnavailable": "No spaces are available on the requested date. Check nearby dates below."
   },
   "common": {
     "letsStart": "Let's start"
@@ -69,5 +76,28 @@
     "emptyTypes": "No event types are available.",
     "emptySubtypes": "No subtypes are available for this event.",
     "unknownType": "This event type is unavailable."
+  },
+  "spaceDetail": {
+    "back": "Back to search",
+    "loading": "Loading…",
+    "notFound": "This space is unavailable.",
+    "error": "Could not load the details.",
+    "about": "About this space",
+    "noDescription": "No description available yet.",
+    "basePrice": "Base price",
+    "calendar": "Availability calendar",
+    "previousMonth": "Previous month",
+    "nextMonth": "Next month",
+    "calendarError": "Could not load the calendar.",
+    "available": "Available",
+    "unavailable": "Unavailable",
+    "calendarHint": "Select a day to see its times.",
+    "emptyMonth": "No dates available this month.",
+    "noTypes": "This space has no configured event types yet.",
+    "reviews": "Venue reviews",
+    "ratings": "ratings",
+    "noReviews": "This venue has no reviews yet.",
+    "moreReviews": "More reviews",
+    "reviewsError": "Could not load reviews."
   }
 }

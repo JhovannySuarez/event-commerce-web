@@ -45,3 +45,28 @@ Run the focused contract and flow tests with:
 ```sh
 npm test -- --watch=false --ts-config=tsconfig.venue-search.spec.json --include=src/app/features/venue-search/venue-search.spec.ts
 ```
+
+## Search a known venue
+
+The search page can switch between general filters and a venue-name/date form.
+After three trimmed characters, suggestions are requested from
+`GET /venues/autocomplete?query=...` and displayed as name/city/state.
+Selecting a suggestion is required; text alone is not a venue selection.
+
+Known-venue searches use `GET /venues/{id}/availability` with the global
+`eventTypeId`, local-calendar `eventDate`, `tier`, `page`, and `pageSize`.
+Hidden city/guest/subtype fields are not sent. Each returned Event Space uses its
+own card and date/slot availability. An empty first Q1 page automatically loads
+Q2 for the same venue (+/-15 days). General search still changes tiers manually.
+Switching modes cancels pending requests and clears results. This feature requires
+the matching backend endpoints documented in the backend `docs/venue-search.md`.
+
+## Event Space detail
+
+Click a space name in search results to open `/event-spaces/:id`. The optional
+`eventTypeId` and `eventDate` query parameters select the calendar type/month;
+direct navigation resolves the space and supported global types from the backend.
+The page loads detail, venue reviews, and monthly availability independently.
+Review scores belong to the venue, not the individual space. Images are deferred.
+Calendar data uses the same configured slots/full-day rules as venue search and
+is not a booking confirmation.

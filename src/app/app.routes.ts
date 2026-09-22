@@ -4,6 +4,7 @@ import { HomeComponent } from './features/event-planner/pages/home/home';
 import { ShowcasePageComponent } from './features/showcase/pages/showcase-page/showcase-page';
 
 export const routes: Routes = [
+  { path: 'event-spaces/:id', loadComponent: () => import('./features/event-space-detail/event-space-detail').then(m => m.EventSpaceDetailComponent) },
 
   /**
    * Event Planner

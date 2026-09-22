@@ -57,7 +57,14 @@
     "nextTier": {
       "Q1": "Buscar en fechas cercanas",
       "Q2": "Buscar con menor capacidad"
-    }
+    },
+    "knownVenue": "¿Ya sabes dónde celebrar? Busca tu lugar aquí",
+    "generalSearch": "Volver a la búsqueda por filtros",
+    "venueName": "Nombre del lugar",
+    "venueHint": "Escribe al menos 3 caracteres",
+    "suggestionsError": "No se pudieron cargar los lugares.",
+    "noVenues": "No encontramos lugares con ese nombre.",
+    "venueUnavailable": "No hay salones disponibles en la fecha solicitada. Consulta las fechas cercanas abajo."
   },
   "common": {
     "letsStart": "Comenzar"
@@ -69,5 +76,28 @@
     "emptyTypes": "No hay tipos de evento disponibles.",
     "emptySubtypes": "No hay subtipos disponibles para este evento.",
     "unknownType": "Este tipo de evento no está disponible."
+  },
+  "spaceDetail": {
+    "back": "Volver a buscar",
+    "loading": "Cargando…",
+    "notFound": "Este salón no está disponible.",
+    "error": "No pudimos cargar el detalle.",
+    "about": "Sobre este salón",
+    "noDescription": "Aún no hay una descripción disponible.",
+    "basePrice": "Precio base",
+    "calendar": "Calendario de disponibilidad",
+    "previousMonth": "Mes anterior",
+    "nextMonth": "Mes siguiente",
+    "calendarError": "No pudimos cargar el calendario.",
+    "available": "Disponible",
+    "unavailable": "Sin disponibilidad",
+    "calendarHint": "Selecciona un día para ver sus horarios.",
+    "emptyMonth": "No hay fechas disponibles este mes.",
+    "noTypes": "Este salón aún no tiene tipos de evento configurados.",
+    "reviews": "Opiniones del lugar",
+    "ratings": "calificaciones",
+    "noReviews": "Este lugar aún no tiene opiniones.",
+    "moreReviews": "Ver más opiniones",
+    "reviewsError": "No pudimos cargar las opiniones."
   }
 }

@@ -7,7 +7,7 @@ import {
   signal
 } from '@angular/core';
 
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 
 import {
   debounceTime,
@@ -15,12 +15,12 @@ import {
   switchMap
 } from 'rxjs/operators';
 
-import { Subject, Subscription, of } from 'rxjs';
+import { Subject, Subscription, timer, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { VenueSearchService } from './venue-search.service';
 import { EventCatalogService, EventType, EventSubtype } from '@core/event-catalog/event-catalog.service';
-import { SearchTier, VenueSearchCriteria, VenueSearchResponse } from './interfaces/venue-search.model';
+import { SearchTier, VenueSearchCriteria, VenueSearchResponse, VenueSuggestion, VenueAvailabilityCriteria } from './interfaces/venue-search.model';
 
 import { TranslatePipe } from '@ngx-translate/core';
 
@@ -36,6 +36,7 @@ import { CityService } from '@core/location/city.service';
   standalone: true,
   imports: [
     TranslatePipe,
+    RouterLink,
     MatDatepickerModule,
     MatInputModule,
     MatNativeDateModule
@@ -60,6 +61,75 @@ export class VenueSearchComponent {
   readonly availableSubtypes = signal<EventSubtype[]>([]);
   readonly isOtherSubtype = computed(() => this.availableSubtypes().find(s => s.id === this.selectedSubtype())?.code === 'other');
   private criteria: VenueSearchCriteria | null = null;
+  private venueCriteria: VenueAvailabilityCriteria | null = null;
+  private suggestionRequest?: Subscription;
+  readonly searchMode = signal<'general' | 'venue'>('general');
+  readonly venueQuery = signal('');
+  readonly selectedVenue = signal<VenueSuggestion | null>(null);
+  readonly venueSuggestions = signal<VenueSuggestion[]>([]);
+  readonly suggestionsLoading = signal(false);
+  readonly suggestionsError = signal(false);
+  readonly suggestionsDone = signal(false);
+
+  setSearchMode(mode: 'general' | 'venue'): void {
+    this.searchMode.set(mode);
+    this.resetResults();
+    this.suggestionRequest?.unsubscribe();
+    this.suggestionsLoading.set(false);
+    this.venueSuggestions.set([]);
+    this.suggestionsError.set(false);
+    this.suggestionsDone.set(false);
+  }
+
+  private resetResults(): void {
+    this.searchRequest?.unsubscribe();
+    this.criteria = null;
+    this.venueCriteria = null;
+    this.response.set(null);
+    this.resultTiers.set([]);
+    this.loading.set(false);
+    this.error.set('');
+    this.page.set(0);
+  }
+
+  onVenueInput(event: Event): void {
+    this.venueQuery.set((event.target as HTMLInputElement).value);
+    this.selectedVenue.set(null);
+    this.resetResults();
+    this.lookupVenues();
+  }
+
+  lookupVenues(): void {
+    this.suggestionRequest?.unsubscribe();
+    this.venueSuggestions.set([]);
+    this.suggestionsError.set(false);
+    this.suggestionsDone.set(false);
+    const query = this.venueQuery().trim();
+    this.suggestionsLoading.set(query.length >= 3);
+    if (query.length < 3) return;
+    this.suggestionRequest = timer(300).pipe(
+      switchMap(() => this.searchService.suggestVenues(query)),
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe({
+      next: venues => {
+        this.venueSuggestions.set(venues);
+        this.suggestionsLoading.set(false);
+        this.suggestionsDone.set(true);
+      },
+      error: () => { this.suggestionsLoading.set(false); this.suggestionsError.set(true); }
+    });
+  }
+
+  selectVenue(venue: VenueSuggestion): void {
+    this.suggestionRequest?.unsubscribe();
+    this.resetResults();
+    this.selectedVenue.set(venue);
+    this.venueQuery.set(`${venue.name} / ${venue.city} / ${venue.state}`);
+    this.venueSuggestions.set([]);
+    this.suggestionsLoading.set(false);
+    this.suggestionsDone.set(false);
+    this.suggestionsError.set(false);
+  }
   readonly response = signal<VenueSearchResponse | null>(null);
   readonly resultTiers = signal<VenueSearchResponse[]>([]);
   readonly loading = signal(false);
@@ -67,13 +137,20 @@ export class VenueSearchComponent {
   readonly page = signal(0);
   readonly pageSize = 20;
   readonly configuredEventTypeId = computed(() => this.selectedType()?.id ?? null);
-  readonly canSearch = computed(() => !!this.selectedCity() && !!this.configuredEventTypeId()
+  readonly canSearch = computed(() => (this.searchMode() === 'venue' ? !!this.selectedVenue() : !!this.selectedCity()) && !!this.configuredEventTypeId()
     && !!this.selectedDate() && Number.isFinite(this.selectedDate()!.getTime())
     && this.selectedDate()! >= this.minDate);
 
   search(): void {
     if (!this.canSearch() || this.loading()) return;
     const date = this.selectedDate()!;
+    const eventDate = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+    this.resetResults();
+    if (this.searchMode() === 'venue') {
+      this.venueCriteria = { venueId: this.selectedVenue()!.id, eventTypeId: this.configuredEventTypeId()!, eventDate };
+      this.fetch('Q1', 0);
+      return;
+    }
     this.criteria = {
       cityId: this.selectedCity()!.id,
       eventTypeId: this.configuredEventTypeId()!,
@@ -98,10 +175,13 @@ export class VenueSearchComponent {
   }
 
   private fetch(tier: SearchTier, page: number): void {
-    if (!this.criteria || this.loading()) return;
+    if ((!this.criteria && !this.venueCriteria) || this.loading()) return;
     this.loading.set(true);
     this.error.set('');
-    this.searchRequest = this.searchService.search({ ...this.criteria, tier, page, pageSize: this.pageSize })
+    const request = this.venueCriteria
+      ? this.searchService.searchVenue(this.venueCriteria, tier, page, this.pageSize)
+      : this.searchService.search({ ...this.criteria!, tier, page, pageSize: this.pageSize });
+    this.searchRequest = request
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: response => {
@@ -113,6 +193,10 @@ export class VenueSearchComponent {
           this.response.set({ ...response, results: this.resultTiers().flatMap(item => item.results) });
           this.page.set(page);
           this.loading.set(false);
+          if (this.venueCriteria && response.tier === 'Q1' && page === 0
+              && response.results.length === 0 && !response.hasMore && response.hasNextTier) {
+            this.fetch('Q2', 0);
+          }
         },
         error: () => {
           this.error.set('venueSearch.searchError');
@@ -143,6 +227,10 @@ export class VenueSearchComponent {
   readonly guests = signal<number>(50);
 
   loadType(): void {
+    this.resetResults();
+    this.suggestionRequest?.unsubscribe();
+    this.venueSuggestions.set([]);
+    this.suggestionsLoading.set(false);
     this.catalogRequest?.unsubscribe();
     this.subtypeRequest?.unsubscribe();
     this.searchRequest?.unsubscribe();

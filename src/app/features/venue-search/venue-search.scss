@@ -718,3 +718,15 @@
 .space-card { padding: 1.5rem; margin: 1rem 0; border: 1px solid #ddd; border-radius: 12px; background: white; }
 .available-date { margin-top: 1rem; display: flex; gap: 1rem; flex-wrap: wrap; }
 .find-button:disabled { opacity: .5; cursor: not-allowed; }
+
+.mode-toggle {
+  display: block;
+  margin-bottom: 1.5rem;
+  padding: .75rem 1rem;
+  border: 1px solid #007f62;
+  border-radius: 12px;
+  background: white;
+  color: #007f62;
+  cursor: pointer;
+  font: inherit;
+}

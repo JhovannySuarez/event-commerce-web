@@ -1,0 +1,87 @@
+<main class="detail-page">
+  <nav><a [routerLink]="returnCode() ? ['/venue-search', returnCode()] : ['/']">← {{ 'spaceDetail.back' | translate }}</a></nav>
+  @if (loading()) { <p role="status">{{ 'spaceDetail.loading' | translate }}</p> }
+  @if (error()) {
+    <p role="alert">{{ error() | translate }}</p>
+    <button type="button" (click)="loadDetail()">{{ 'catalog.retry' | translate }}</button>
+  }
+  @if (detail(); as space) {
+    <header><p class="eyebrow">{{ space.venue.name }}</p><h1>{{ space.name }}</h1>
+      <p>{{ space.venue.address }} · {{ space.venue.city }} / {{ space.venue.state }}</p>
+    </header>
+    <div class="detail-grid">
+      <section class="panel" aria-labelledby="about-title">
+        <h2 id="about-title">{{ 'spaceDetail.about' | translate }}</h2>
+        <p>{{ space.description || ('spaceDetail.noDescription' | translate) }}</p>
+        <dl><dt>{{ 'venueSearch.capacity' | translate }}</dt><dd>{{ space.capacityMin ?? '—' }}–{{ space.capacityMax ?? '—' }}</dd>
+          @if (space.basePrice !== null && space.currencyCode) {
+            <dt>{{ 'spaceDetail.basePrice' | translate }}</dt><dd>{{ space.basePrice }} {{ space.currencyCode }}</dd>
+          }
+        </dl>
+        <h2>{{ space.venue.name }}</h2><p>{{ space.venue.description }}</p>
+        <p>{{ space.venue.address }}</p><p>{{ space.venue.city }} / {{ space.venue.state }}</p>
+      </section>
+      <section class="panel" aria-labelledby="calendar-title" [attr.aria-busy]="calendarLoading()">
+        <h2 id="calendar-title">{{ 'spaceDetail.calendar' | translate }}</h2>
+        @if (space.eventTypes.length) {
+          <label for="calendar-type">{{ 'venueSearch.eventType' | translate }}</label>
+          <select id="calendar-type" [value]="eventTypeId()" (change)="changeType($event)">
+            @for (type of space.eventTypes; track type.id) { <option [value]="type.id">{{ type.name }}</option> }
+          </select>
+          <div class="month-nav">
+            <button type="button" (click)="changeMonth(-1)" [attr.aria-label]="'spaceDetail.previousMonth' | translate">←</button>
+            <h3>{{ monthLabel() }}</h3>
+            <button type="button" (click)="changeMonth(1)" [attr.aria-label]="'spaceDetail.nextMonth' | translate">→</button>
+          </div>
+          @if (calendarLoading()) { <p role="status">{{ 'spaceDetail.loading' | translate }}</p> }
+          @if (calendarError()) {
+            <p role="alert">{{ 'spaceDetail.calendarError' | translate }}</p>
+            <button type="button" (click)="loadCalendar()">{{ 'catalog.retry' | translate }}</button>
+          }
+          <div class="calendar-grid">
+            @for (day of weekdays(); track $index) { <span class="weekday">{{ day }}</span> }
+            @for (day of days(); track $index) {
+              @if (day) {
+                <button type="button" [class.available]="day.available" [class.selected]="day.date === selectedDate()"
+                  [disabled]="!calendar()" [attr.aria-pressed]="day.date === selectedDate()"
+                  [attr.aria-label]="day.date + ' — ' + ((day.available ? 'spaceDetail.available' : 'spaceDetail.unavailable') | translate)"
+                  (click)="selectedDate.set(day.date)">{{ day.day }}</button>
+              } @else { <span></span> }
+            }
+          </div>
+          <p class="legend">● {{ 'spaceDetail.available' | translate }} · {{ 'spaceDetail.calendarHint' | translate }}</p>
+          @if (calendar() && calendar()!.availableDates.length === 0) { <p>{{ 'spaceDetail.emptyMonth' | translate }}</p> }
+          @if (calendar() && selectedDate()) {
+            <h3>{{ selectedDate() }}</h3>
+            @if (selectedAvailability(); as date) {
+              @if (date.availableSlots.length === 0) { <p>{{ 'venueSearch.fullDay' | translate }}</p> }
+              @else {
+                <ul class="slots">@for (slot of date.availableSlots; track $index) {
+                  <li>{{ slot.from.slice(0, 5) }}–{{ slot.until.slice(0, 5) }}</li>
+                }</ul>
+              }
+            } @else { <p>{{ 'spaceDetail.unavailable' | translate }}</p> }
+          }
+        } @else { <p>{{ 'spaceDetail.noTypes' | translate }}</p> }
+      </section>
+    </div>
+    <section class="panel reviews" aria-labelledby="reviews-title" [attr.aria-busy]="reviewsLoading()">
+      <h2 id="reviews-title">{{ 'spaceDetail.reviews' | translate }} · {{ space.venue.name }}</h2>
+      @if (reviews(); as data) {
+        @if (data.reviewCount > 0) { <p>★ {{ data.averageRating?.toFixed(1) }} / 5 · {{ data.reviewCount }} {{ 'spaceDetail.ratings' | translate }}</p> }
+        @else { <p>{{ 'spaceDetail.noReviews' | translate }}</p> }
+        @for (review of data.results; track review.id) {
+          <article class="review"><p>★ {{ review.rating }} / 5 · {{ review.createdAt.slice(0, 10) }}</p>
+            @if (review.title) { <h3>{{ review.title }}</h3> }<p>{{ review.review }}</p>
+          </article>
+        }
+        @if (data.hasMore) { <button type="button" [disabled]="reviewsLoading()" (click)="loadReviews(true)">{{ 'spaceDetail.moreReviews' | translate }}</button> }
+      }
+      @if (reviewsLoading()) { <p role="status">{{ 'spaceDetail.loading' | translate }}</p> }
+      @if (reviewsError()) {
+        <p role="alert">{{ 'spaceDetail.reviewsError' | translate }}</p>
+        <button type="button" (click)="loadReviews(!!reviews())">{{ 'catalog.retry' | translate }}</button>
+      }
+    </section>
+  }
+</main>

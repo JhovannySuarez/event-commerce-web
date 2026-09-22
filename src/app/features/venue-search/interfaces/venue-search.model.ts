@@ -46,3 +46,15 @@ export interface VenueSearchResponse {
   hasMore: boolean;
   hasNextTier: boolean;
 }
+
+export interface VenueSuggestion {
+  id: string;
+  name: string;
+  city: string;
+  state: string;
+}
+export interface VenueAvailabilityCriteria {
+  venueId: string;
+  eventTypeId: string;
+  eventDate: string;
+}

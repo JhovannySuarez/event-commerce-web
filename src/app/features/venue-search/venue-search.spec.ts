@@ -151,4 +151,78 @@ describe('Venue search flow', () => {
     expect(component.subtypesError()).toBe(false);
     expect(component.availableSubtypes()[0].name).toBe('Wedding');
   });
+  it('looks up venues after three characters and cancels stale suggestions', async () => {
+    vi.useFakeTimers();
+    try {
+      component.setSearchMode('venue');
+      component.onVenueInput({ target: { value: 'Ag' } } as unknown as Event);
+      await vi.advanceTimersByTimeAsync(300);
+      http.expectNone(r => r.url.endsWith('/autocomplete'));
+      component.onVenueInput({ target: { value: 'Agu' } } as unknown as Event);
+      await vi.advanceTimersByTimeAsync(300);
+      const old = http.expectOne(r => r.url.endsWith('/autocomplete'));
+      expect(old.request.params.get('query')).toBe('Agu');
+      component.onVenueInput({ target: { value: 'Aguas' } } as unknown as Event);
+      expect(old.cancelled).toBe(true);
+      await vi.advanceTimersByTimeAsync(300);
+      const venue = { id: 'venue-id', name: 'Aguas Claras', city: 'Medellin', state: 'Antioquia' };
+      http.expectOne(r => r.url.endsWith('/autocomplete')).flush([venue]);
+      component.selectVenue(venue);
+      expect(component.canSearch()).toBe(true);
+      expect(component.venueSuggestions()).toEqual([]);
+      component.onVenueInput({ target: { value: 'A' } } as unknown as Event);
+      expect(component.selectedVenue()).toBeNull();
+      expect(component.canSearch()).toBe(false);
+    } finally { vi.useRealTimers(); }
+  });
+
+  it('retries venue suggestions and handles empty matches', async () => {
+    vi.useFakeTimers();
+    try {
+      component.setSearchMode('venue');
+      component.venueQuery.set('Agu');
+      component.lookupVenues();
+      await vi.advanceTimersByTimeAsync(300);
+      http.expectOne(r => r.url.endsWith('/autocomplete')).flush({}, { status: 500, statusText: 'Error' });
+      expect(component.suggestionsError()).toBe(true);
+      component.lookupVenues();
+      await vi.advanceTimersByTimeAsync(300);
+      http.expectOne(r => r.url.endsWith('/autocomplete')).flush([]);
+      expect(component.suggestionsError()).toBe(false);
+      expect(component.suggestionsDone()).toBe(true);
+      expect(component.venueSuggestions()).toEqual([]);
+    } finally { vi.useRealTimers(); }
+  });
+
+  it('searches only the chosen venue without hidden city or guest filters and falls back to nearby dates', () => {
+    component.setSearchMode('venue');
+    component.selectVenue({ id: 'venue-id', name: 'Venue', city: 'City', state: 'State' });
+    component.search();
+    const exact = http.expectOne(r => r.url.endsWith('/venues/venue-id/availability'));
+    expect(Object.fromEntries(exact.request.params.keys().map(k => [k, exact.request.params.get(k)]))).toEqual({
+      eventTypeId, eventDate: '2030-01-20', tier: 'Q1', page: '0', pageSize: '20'
+    });
+    exact.flush({ results: [], tier: 'Q1', hasMore: false, hasNextTier: true });
+    const nearby = http.expectOne(r => r.url.endsWith('/availability'));
+    expect(nearby.request.params.get('tier')).toBe('Q2');
+    expect(nearby.request.params.get('page')).toBe('0');
+    nearby.flush({ results: [{ eventSpaceId: 'hall-a' }, { eventSpaceId: 'hall-b' }], tier: 'Q2', hasMore: true, hasNextTier: false });
+    expect(component.response()?.results.length).toBe(2);
+    component.loadMore();
+    const page = http.expectOne(r => r.url.endsWith('/availability'));
+    expect(page.request.params.get('page')).toBe('1');
+    component.setSearchMode('general');
+    expect(page.cancelled).toBe(true);
+    expect(component.resultTiers()).toEqual([]);
+  });
+
+  it('keeps exact-date venue results without automatically loading nearby dates', () => {
+    component.setSearchMode('venue');
+    component.selectVenue({ id: 'venue-id', name: 'Venue', city: 'City', state: 'State' });
+    component.search();
+    http.expectOne(r => r.url.endsWith('/availability')).flush({ results: [{ eventSpaceId: 'hall-a' }], tier: 'Q1', hasMore: false, hasNextTier: true });
+    http.expectNone(r => r.url.endsWith('/availability'));
+    expect(component.resultTiers()[0].results.length).toBe(1);
+  });
+
 });
